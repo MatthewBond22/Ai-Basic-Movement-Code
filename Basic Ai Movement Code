@@ -1,0 +1,119 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEditorInternal;
+using UnityEngine;
+
+public class Waypoints : MonoBehaviour {
+
+    //Allows for Changes within Unity
+    public GameObject Character;
+    public GameObject Waypoint1;
+    public GameObject Waypoint2;
+    public GameObject Waypoint3;
+    public GameObject Waypoint4;
+
+    //Sets a Name for the State Enum Section
+    public State motion;
+
+    //Allows for Certain Factors to be set Such as Speed and the Rotation
+    public float speed;
+    public float rotation;
+    
+
+    //States of which the Character will work (If idle it will Switch to Way1 and So on)
+    public enum State
+    {
+        Idle,
+        Way1,
+        Way2,
+        Way3,
+        Way4
+    }
+
+	// Use this for initialization
+	void Start () {
+		
+	}
+	
+	// Update is called once per frame
+	void Update () {
+		
+        //Says which state everything is in (if Idle confirms is Idle)
+        switch (motion)
+        {
+            case State.Idle:
+                Idle ();
+                break;
+            case State.Way1:
+                Way1();
+                break;
+            case State.Way2:
+                Way2();
+                break;
+            case State.Way3:
+                Way3();
+                break;
+            case State.Way4:
+                Way4();
+                break;
+        }
+
+	}
+
+    //Sets the Idle State to the Way1 State and begins the Moving section
+    public void Idle()
+    {
+        motion = State.Way1;
+    }
+
+    //Start of Movement to Waypoint 1
+    public void Way1()
+    {
+        //Gets the Distance between Waypoint 1 and the Character.
+        float distance = Vector3.Distance(Character.transform.position, Waypoint1.transform.position);
+        //Rotates the Character to make sure it is facing the right way when moving towards the waypoint
+        Character.transform.rotation = Quaternion.Slerp(Character.transform.rotation, Quaternion.LookRotation(Waypoint1.transform.position - Character.transform.position), rotation * Time.deltaTime);
+        //GameObject.Find("Character"); Un-Needed Code, Was Meant to be for Animation but the Animation is already tied to the Model
+        //Moves the character forward based off the position and the Speed.
+        Character.transform.position += Character.transform.forward * speed * Time.deltaTime;
+        //If the Distance is Less than 2F then it will change the state to the next Waypoint
+        if (distance < 2f)
+            motion = State.Way2;
+    }
+    public void Way2()
+    {
+        //Gets the Distance between Waypoint 2 and the Character.
+        float distance = Vector3.Distance(Character.transform.position, Waypoint2.transform.position);
+        //Rotates the Character to make sure it is facing the right way when moving towards the waypoint
+        Character.transform.rotation = Quaternion.Slerp(Character.transform.rotation, Quaternion.LookRotation(Waypoint2.transform.position - Character.transform.position), rotation * Time.deltaTime);
+        //GameObject.Find("Character");
+        Character.transform.position += Character.transform.forward * speed * Time.deltaTime;
+        if (distance < 2f)
+            motion = State.Way3;
+    }
+    public void Way3()
+    {
+        //Gets the Distance between Waypoint 3 and the Character.
+        float distance = Vector3.Distance(Character.transform.position, Waypoint3.transform.position);
+        //Rotates the Character to make sure it is facing the right way when moving towards the waypoint
+        Character.transform.rotation = Quaternion.Slerp(Character.transform.rotation, Quaternion.LookRotation(Waypoint3.transform.position - Character.transform.position), rotation * Time.deltaTime);
+        //GameObject.Find("Character");
+        //Moves the character forward based off the position and the Speed.
+        Character.transform.position += Character.transform.forward * speed * Time.deltaTime;
+        if (distance < 2f)
+            motion = State.Way4;
+    }
+    public void Way4()
+    {
+        //Gets the Distance between Waypoint 4 and the Character.
+        float distance = Vector3.Distance(Character.transform.position, Waypoint4.transform.position);
+        //Rotates the Character to make sure it is facing the right way when moving towards the waypoint
+        Character.transform.rotation = Quaternion.Slerp(Character.transform.rotation, Quaternion.LookRotation(Waypoint4.transform.position - Character.transform.position), rotation * Time.deltaTime);
+        //GameObject.Find("Character");
+        //Moves the character forward based off the position and the Speed.
+        Character.transform.position += Character.transform.forward * speed * Time.deltaTime;
+        //Sets the Motion back to Waypoint 1 to make sure that it loops the code back around. Giving it constant motion
+        if (distance < 2f)
+            motion = State.Way1;
+    }
+}
